@@ -1,9 +1,13 @@
+<!--  Author  : Vishesh Paliwal 
+      Purpose : User Interface for Bhashini Translations (Text to text)
+      Date    : 29 October 2023 -->
 <!DOCTYPE html>
 <html>
 <head>
     <title>Bashini Language Translator</title>
     <style>
         body {
+            /* Adding Background Image and setting allignment */
             background-image: url('https://img.freepik.com/free-vector/abstract-fluid-neon-color-3d-effect-business-background-banner-design-multipurpose_1340-16790.jpg');
             background-size: cover; 
             font-family: Arial, sans-serif;
@@ -13,19 +17,27 @@
             align-items: center;
             height: 100vh;
         }
+
+        /* Allignment for translator-container */
         .translator-container {
             display: flex;
             flex-direction: row;
         }
+
+        /* Dividind whole page into two halves for input and output container */
         .input-container, .output-container {
             width: 50%;
             padding: 20px;
         }
+
+         /* Provided padding and margin for text-area */
         select, textarea {
             width: 100%;
             padding: 10px;
             margin: 10px;
         }
+
+        /* setting width , padding , colour for button */
         button {
             width: 100%;
             padding: 10px 20px;
@@ -36,77 +48,90 @@
         }
     </style>
 </head>
-<body>
-    <div class="translator-container">
-        <div class="input-container">
-            <h2>Input</h2>
-            <label for="inputLanguage">Select Input Language:</label>
-            <select id="inputLanguage">
-                <option value="hindi">Hindi</option>
-                <option value="tamil">Tamil</option>
-                <option value="Marathi">Marathi</option>
-                <option value="Telugu">Telugu</option>
-                <option value="Malayalam">Malayalam</option>
-                <option value="Gujrati">Gujrati</option>
-                <option value="Kannad">Kannad</option>
-            </select>
-            <label for="inputText">Enter Text to Translate:</label>
-            <textarea id="inputText" rows="4"></textarea>
-            <button id="clearInputButton">Clear</button>
+    <body>
+        <div class="translator-container">
+            <!-- creating the input container -->
+            <div class="input-container">
+                <h2>Input</h2>
+                <label for="inputLanguage">Select Input Language:</label>
+                <!-- creating dropdown to select input languages -->
+                <select id="inputLanguage">
+                    <option value="hindi">Hindi</option>
+                    <option value="tamil">Tamil</option>
+                    <option value="Marathi">Marathi</option>
+                    <option value="Telugu">Telugu</option>
+                    <option value="Malayalam">Malayalam</option>
+                    <option value="Gujrati">Gujrati</option>
+                    <option value="Kannad">Kannad</option>
+                </select>
+                <!-- providing textbox for input text to be translated -->
+                <label for="inputText">Enter Text to Translate:</label>
+                <textarea id="inputText" rows="4"></textarea>
+                <button id="clearInputButton">Clear</button>
+            </div>
+            <!-- creating the output container -->
+            <div class="output-container">
+                <h2>Output</h2>
+                <label for="outputLanguage">Select Output Language:</label>
+                <!-- creating dropdown to select output languages -->
+                <select id="outputLanguage">
+                    <option value="hindi">Hindi</option>
+                    <option value="tamil">Tamil</option>
+                    <option value="Marathi">Marathi</option>
+                    <option value="Telugu">Telugu</option>
+                    <option value="Malayalam">Malayalam</option>
+                    <option value="Gujrati">Gujrati</option>
+                    <option value="Kannad">Kannad</option>
+                </select>
+                <!-- providing textbox for output translated text -->
+                <label for="outputText">Translated Text:</label>
+                <textarea id="outputText" rows="4" readonly></textarea>
+                <button id="clearOutputButton">Clear</button>
+                <br>
+                <br>
+                <button id="translateButton">Translate</button>
+                
+            </div>
         </div>
-        <div class="output-container">
-            <h2>Output</h2>
-            <label for="outputLanguage">Select Output Language:</label>
-            <select id="outputLanguage">
-                <option value="hindi">Hindi</option>
-                <option value="tamil">Tamil</option>
-                <option value="Marathi">Marathi</option>
-                <option value="Telugu">Telugu</option>
-                <option value="Malayalam">Malayalam</option>
-                <option value="Gujrati">Gujrati</option>
-                <option value="Kannad">Kannad</option>
-            </select>
-            <label for="outputText">Translated Text:</label>
-            <textarea id="outputText" rows="4" readonly></textarea>
-            <button id="clearOutputButton">Clear</button>
-            <br>
-            <br>
-            <button id="translateButton">Translate</button>
+
+        <script type="module"> 
+            // importing the bhashini package , downloaded on my pc
+            import bhashini from "./bhashini-translation";
             
-        </div>
-    </div>
-
-    <script>
-
-            //  I don't currently have the API id of Bshini to call , hence 
-            //  I am not using fetch API , but creating a function that returns
-            //  the input text entered as translated text .
-
-        function translateBashini(inputLanguage, outputLanguage, textToTranslate) {
-            return new Promise((resolve, reject) => {
-                resolve(textToTranslate);
-            });
-        }
-
-        document.getElementById("translateButton").addEventListener("click", async () => {
-            const inputLanguage = document.getElementById("inputLanguage").value;
-            const outputLanguage = document.getElementById("outputLanguage").value;
-            const textToTranslate = document.getElementById("inputText").value;
-
-            if (textToTranslate) {
-                const translation = await translateBashini(inputLanguage, outputLanguage, textToTranslate);
-                document.getElementById("outputText").value = translation;
+            // function to resolve text to be translated and get output .
+            function translateBashini(inputLanguage, outputLanguage, textToTranslate) 
+            {
+                    return new Promise((resolve, reject) => {
+                    resolve(textToTranslate);
+                });
             }
-        });
 
-        document.getElementById("clearInputButton").addEventListener("click", () => {
-            document.getElementById("inputText").value = "";
-        });
+            document.getElementById("translateButton").addEventListener("click", async () => {
+                const userid = "95490fb97caf4a71aeb000a5a9905ca0";
+                const UlcaApiKey = "0762bcbb16-8195-442f-936b-273b80158a82";
+                const InferenceApiKey = "3zGslJaCiCYXuTa50IpoarZ-U_RwocGjhxq_LR1K_PxUWbz70ckfAyhAAKeaRkpa"
+                // authenticating through userid , key and inference key generated via website
+                bhashini.auth(userid, UlcaApiKey, InferenceApiKey);
+                
+                // getting input language , output language and text to translate from user and declaring them as constants
+                const inputLanguage = document.getElementById("inputLanguage").value;
+                const outputLanguage = document.getElementById("outputLanguage").value;
+                const textToTranslate = document.getElementById("inputText").value;
 
-        document.getElementById("clearOutputButton").addEventListener("click", () => {
-            document.getElementById("outputText").value = "";
-        });
-    </script>
-</body>
+                // calling the function from "bashini-translations" to translate the input text
+                bhashini.nmt(inputLanguage, outputLanguage, textToTranslate)
+            });
+            
+            // functionalised clear button to clear the input text
+            document.getElementById("clearInputButton").addEventListener("click", () => {
+                document.getElementById("inputText").value = "";
+            });
+
+            // functionalised clear button to clear the output text
+            document.getElementById("clearOutputButton").addEventListener("click", () => {
+                document.getElementById("outputText").value = "";
+            });
+
+        </script>
+    </body>
 </html>
-
